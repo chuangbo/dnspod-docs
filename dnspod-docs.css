@@ -1,0 +1,58 @@
+/* CSS declarations go here */
+body {
+  padding-top: 30px;
+  padding-bottom: 40px;
+}
+.sidebar-nav {
+  padding: 9px 0;
+}
+.sidebar-nav .add-list {
+  margin: 9px;
+  width: 82%;
+}
+.edit_doc_title {
+}
+.edit_doc_textarea {
+  width: 100%;
+  min-height: 300px;
+}
+.tag {
+  float: left;
+  margin-right: 5px;
+  padding: 0 5px;
+  background: #bababa;
+  color: #fff;
+  border-radius: 4px;
+  cursor: pointer;
+}
+.tag:hover{
+  background: #777;
+}
+
+.new-tag {
+  background: transparent;
+  border: 1px dashed #999;
+  color: #999;
+}
+.new-tag:hover {
+  background: #ddd;
+  color: #fff;
+}
+
+.tag.selected {
+  background: #777;
+}
+
+.tag.edittag {
+  width: 70px;
+}
+
+.tag .remove-tag:hover {
+  color: #000;
+}
+
+#edittag-input {
+  margin: 0;
+  padding: 0;
+  width: 95%;
+}
