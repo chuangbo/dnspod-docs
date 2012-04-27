@@ -115,7 +115,8 @@ Template.docs.events =
       unless title == '' and Docs.findOne(title: title)
         list_name = Session.get('list_name')
         list_id = Lists.findOne(name: list_name)._id
-        demo_content = Docs.findOne(title: "MarkdownDemo").content
+        demo = Docs.findOne(title: "MarkdownDemo")
+        demo_content = demo.content if demo? else ''
         $('#newdoc').modal('hide')
         Docs.insert(title: title, list_id: list_id, content: "##{title} \n\n#{demo_content}", tags:[], timestamp: new Date())
         Router.setList("#{list_name}/#{title}/edit")
