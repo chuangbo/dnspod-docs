@@ -14,7 +14,8 @@ body {
 }
 .edit_doc_textarea {
   width: 100%;
-  min-height: 300px;
+  min-height: 500px;
+  font-family: Monaco, "Courier New", "DejaVu Sans Mono", "Bitstream Vera Sans Mono", monospace;
 }
 .tag {
   float: left;

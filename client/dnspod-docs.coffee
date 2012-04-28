@@ -191,10 +191,10 @@ Template.edit_doc.events =
     doc_title = Session.get('doc_view_title')
     content = $('textarea').val()
     Docs.update({title: doc_title}, {$set: {content: content, timestamp: new Date()}})
-  'keyup textarea': ->
+  'keyup textarea, focusout textarea': ->
     content = $('textarea').val()
     $('.doc_preview').html(Template.edit_doc_preview(content: content))
-    $('textarea').height($('.doc_preview').height())
+    $('textarea').height($('.doc_preview').height()+30)
 
 
 TodosRouter = Backbone.Router.extend
