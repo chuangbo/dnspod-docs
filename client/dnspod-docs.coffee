@@ -163,16 +163,21 @@ Template.doc_item.path = get_doc_path
 
 Template.view_doc.doc = ->
   doc_title = Session.get('doc_view_title')
+  list_name = Session.get('list_name')
+  list = Lists.findOne(name: list_name)
+  list_id = list._id if list
   console.log 'doc_title', doc_title
   console.log 'doc', Docs.findOne(title: doc_title)
-  Docs.findOne(title: doc_title) ? {}
+  Docs.findOne(title: doc_title, list_id: list_id) ? {}
 
 Template.view_doc.path = get_doc_path
 
 Template.view_doc.events =
   "click .delete-doc": ->
     doc_title = Session.get('doc_view_title')
-    Docs.remove(title: doc_title)
+    list_name = Session.get('list_name')
+    list_id = Lists.findOne(name: list_name)._id
+    Docs.remove(title: doc_title, list_id: list_id)
     $('#removeDoc').modal('hide')
     list_name = Session.get('list_name')
     Router.setList("#{list_name}")
@@ -180,9 +185,12 @@ Template.view_doc.events =
 
 Template.edit_doc.doc = ->
   doc_title = Session.get('doc_view_title')
+  list_name = Session.get('list_name')
+  list = Lists.findOne(name: list_name)
+  list_id = list._id if list
   console.log 'doc_title', doc_title
   console.log 'edit_doc', Docs.findOne(title: doc_title)
-  Docs.findOne(title: doc_title) ? {}
+  Docs.findOne(title: doc_title, list_id: list_id) ? {}
 
 Template.edit_doc.path = get_doc_path
 
