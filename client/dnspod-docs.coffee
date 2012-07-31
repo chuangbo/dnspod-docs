@@ -112,9 +112,9 @@ Template.docs.events =
     if evt.type == "keyup" and evt.which == 13 or
         evt.type == 'click'
       title = $('#newDocName').val()
-      unless title == '' and Docs.findOne(title: title)
-        list_name = Session.get('list_name')
-        list_id = Lists.findOne(name: list_name)._id
+      list_name = Session.get('list_name')
+      list_id = Lists.findOne(name: list_name)._id
+      unless title == '' and Docs.findOne(title: title, list_id: list_id)
         demo = Docs.findOne(title: "MarkdownDemo")
         demo_content = if demo then demo.content else ''
         $('#newdoc').modal('hide')
@@ -174,10 +174,7 @@ Template.view_doc.path = get_doc_path
 
 Template.view_doc.events =
   "click .delete-doc": ->
-    doc_title = Session.get('doc_view_title')
-    list_name = Session.get('list_name')
-    list_id = Lists.findOne(name: list_name)._id
-    Docs.remove(title: doc_title, list_id: list_id)
+    Docs.remove(_id: this._id)
     $('#removeDoc').modal('hide')
     list_name = Session.get('list_name')
     Router.setList("#{list_name}")
@@ -189,16 +186,15 @@ Template.edit_doc.doc = ->
   list = Lists.findOne(name: list_name)
   list_id = list._id if list
   console.log 'doc_title', doc_title
-  console.log 'edit_doc', Docs.findOne(title: doc_title)
+  console.log 'edit_doc', Docs.findOne(title: doc_title, list_id: list_id)
   Docs.findOne(title: doc_title, list_id: list_id) ? {}
 
 Template.edit_doc.path = get_doc_path
 
 Template.edit_doc.events =
   'click .save': ->
-    doc_title = Session.get('doc_view_title')
     content = $('textarea').val()
-    Docs.update({title: doc_title}, {$set: {content: content, timestamp: new Date()}})
+    Docs.update({_id: this._id}, {$set: {content: content, timestamp: new Date()}})
   'keyup textarea, focusout textarea': ->
     content = $('textarea').val()
     $('.doc_preview').html(Template.edit_doc_preview(content: content))
