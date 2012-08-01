@@ -10,6 +10,10 @@ body {
   margin: 9px;
   width: 82%;
 }
+.sidebar-nav ul > li > a {
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
 .edit_doc_title {
 }
 .edit_doc_textarea {
