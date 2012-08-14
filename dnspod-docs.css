@@ -61,3 +61,8 @@ body {
   padding: 0;
   width: 95%;
 }
+
+.btn-toolbar .form-search {
+  float: left;
+  margin: 0;
+}

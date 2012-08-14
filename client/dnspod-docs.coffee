@@ -5,7 +5,23 @@ Docs = new Meteor.Collection('docs');
 Session.set('list_name', null)
 Session.set('doc_view_title', null)
 Session.set('tag_filter', null)
+Session.set('search_query', null)
 
+Template.index.lists = ->
+  Lists.find().count()
+
+Template.index.docs = ->
+  Docs.find().count()
+
+Template.search_bar.query = ->
+  Session.get('search_query') ? ''
+
+Template.search_bar.events =
+  'submit form': (e) ->
+    console.log e, arguments
+    e.preventDefault()
+    query = $('input', e.target).val()
+    Router.navigate("search/#{query}", {trigger: true}) if query != ''
 
 Template.main.editing_one_doc = ->
   Session.equals('view', 'doc_edit')
@@ -57,6 +73,8 @@ Template.list_item.active = ->
 
 Template.content.is_index = ->
   Session.equals('view', 'index')
+Template.content.is_search_result = ->
+  Session.equals('view', 'search_result')
 Template.content.list_docs = ->
   Session.equals('view', 'docs')
 Template.content.opened_one_doc = ->
@@ -156,7 +174,7 @@ Template.tag.events =
     Docs.update({_id: this.doc_id}, {$pull: {tags: this.tag}})
 
 get_doc_path = ->
-  list_name = Session.get('list_name')
+  list_name = Lists.findOne(_id: @list_id).name
   "#{list_name}/#{@title}"
 
 Template.doc_item.path = get_doc_path
@@ -201,9 +219,16 @@ Template.edit_doc.events =
     $('textarea').height($('.doc_preview').height()+30)
 
 
+Template.search_result.docs = ->
+  query = Session.get('search_query')
+  r = RegExp query, 'i'
+  Docs.find($or: [ {title: r}, {content: r}, {tags: r}] )
+
+
 TodosRouter = Backbone.Router.extend
   routes:
     "": "index"
+    "search/:query": "search_result_view"
     ":list_name": "list_view"
     ":list_name/:doc_title": "doc_view"
     ":list_name/:doc_title/edit": "doc_edit_view"
@@ -211,25 +236,32 @@ TodosRouter = Backbone.Router.extend
     Session.set('view', 'index')
     Session.set("doc_view_title", null)
     Session.set("list_name", null)
-    Session.set("tag_filter", null);
+    Session.set("tag_filter", null)
+  search_result_view: (query) ->
+    console.log 'router: search result of query:', query
+    Session.set('view', 'search_result')
+    Session.set('search_query', query)
+    Session.set("doc_view_title", null)
+    Session.set("list_name", null)
+    Session.set("tag_filter", null)
   list_view: (list_name) ->
     console.log 'router: list view', list_name
     Session.set('view', 'docs')
     Session.set("doc_view_title", null)
     Session.set("list_name", list_name)
-    Session.set("tag_filter", null);
+    Session.set("tag_filter", null)
   doc_view: (list_name, doc_title) ->
     console.log 'router: doc view', list_name
     Session.set('view', 'doc')
     Session.set('list_name', list_name)
     Session.set('doc_view_title', doc_title)
-    Session.set("tag_filter", null);
+    Session.set("tag_filter", null)
   doc_edit_view: (list_name, doc_title) ->
     console.log 'router: doc edit view', list_name
     Session.set('view', 'doc_edit')
     Session.set('list_name', list_name)
     Session.set('doc_view_title', doc_title)
-    Session.set("tag_filter", null);
+    Session.set("tag_filter", null)
     
   
   setList: (list_name) ->
