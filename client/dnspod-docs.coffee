@@ -174,7 +174,7 @@ Template.tag.events =
     Docs.update({_id: this.doc_id}, {$pull: {tags: this.tag}})
 
 get_doc_path = ->
-  list_name = Lists.findOne(_id: @list_id).name
+  list_name = Lists.findOne(_id: @list_id)?.name
   "#{list_name}/#{@title}"
 
 Template.doc_item.path = get_doc_path
@@ -222,7 +222,16 @@ Template.edit_doc.events =
 Template.search_result.docs = ->
   query = Session.get('search_query')
   r = RegExp query, 'i'
-  Docs.find( {$or: [ {title: r}, {content: r}, {tags: r}]}, {sort: {timestamp: -1}} )
+  lists = _(Lists.find(name: r).fetch()).pluck('_id')
+  Docs.find(
+    {$or: [
+      {title: r},
+      {content: r},
+      {tags: r},
+      {list_id: {$in: lists} }
+    ] },
+    {sort: {timestamp: -1}}
+  )
 
 
 TodosRouter = Backbone.Router.extend
