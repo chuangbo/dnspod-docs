@@ -222,7 +222,7 @@ Template.edit_doc.events =
 Template.search_result.docs = ->
   query = Session.get('search_query')
   r = RegExp query, 'i'
-  Docs.find($or: [ {title: r}, {content: r}, {tags: r}] )
+  Docs.find( {$or: [ {title: r}, {content: r}, {tags: r}]}, {sort: {timestamp: -1}} )
 
 
 TodosRouter = Backbone.Router.extend
