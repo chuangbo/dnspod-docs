@@ -1,0 +1,19 @@
+{
+  "meteor": {
+    "git": "https://github.com/meteor/meteor.git",
+    "branch": "master",
+    "commit": "f2653345665b691f7d5a59a0e050d645c32cdaf6"
+  },
+  "dependencies": {
+    "basePackages": {
+      "marked": {}
+    },
+    "packages": {
+      "marked": {
+        "git": "https://github.com/chuangbo/meteor-marked.git",
+        "tag": "v0.2.5",
+        "commit": "46df062565b7153707f8f01cc746af5f7b397cde"
+      }
+    }
+  }
+}

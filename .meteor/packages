@@ -8,7 +8,6 @@ underscore
 backbone
 jquery
 coffeescript
-showdown
-handlebars
 less
 bootstrap
+marked
