@@ -1,6 +1,3 @@
-Lists = new Meteor.Collection('lists');
-Docs = new Meteor.Collection('docs');
-
 
 Session.set('list_name', null)
 Session.set('doc_view_title', null)
@@ -282,9 +279,3 @@ Router = new TodosRouter
 Meteor.startup ->
   Backbone.history.start()
 
-# export some var to window for debug
-exports = exports ? this;
-_(exports).extend
-  Router: Router
-  Lists: Lists
-  Docs: Docs
